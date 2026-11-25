@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self'; font-src 'self'; img-src 'self' data:; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <script>document.documentElement.classList.add("js")</script>
+  <title>Pinchshot</title>
+  <meta name="description" content="Pinch, pull, release. A hands-only slingshot puzzle game for Meta Quest where every level is built around your real room.">
+  <link rel="icon" href="icon.png">
+  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="preload" href="fonts/tiny5-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <meta property="og:title" content="Pinchshot">
+  <meta property="og:description" content="Pinch, pull, release. A hands-only slingshot puzzle game for Meta Quest where every level is built around your real room.">
+  <meta property="og:image" content="https://sergeyglkn.github.io/pinchshotxr/poster.jpg">
+  <script src="logo.js?v=7" defer></script>
+  <script src="video.js?v=7" defer></script>
+  <script src="sound.js?v=7" defer></script>
+  <script src="contact.js?v=7" defer></script>
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <video muted loop playsinline preload="none" disablepictureinpicture></video>
+    <div class="cover"></div>
+  </div>
+
+  <div class="home">
+    <header class="h-top">
+      <a class="h-logo" href="./" aria-label="Pinchshot home">
+        <canvas class="voxel-logo" aria-hidden="true"></canvas>
+        <span class="logo-fallback">PINCHSHOT</span>
+      </a>
+      <div class="h-right">
+        <span class="h-label">Early Access <i>/</i> Meta Quest</span>
+        <button class="sound" type="button" aria-pressed="false" hidden>
+          <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="sound-label">Sound off</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="h-grid">
+      <h1 class="sr-only">Pinchshot</h1>
+
+      <section class="h-lead">
+        <span class="h-index">001 / 001</span>
+        <h2 class="h-title">Pinch, pull,<br>release.</h2>
+        <p class="h-sub">A hands-only slingshot puzzle game where every level is built around your real room.</p>
+      </section>
+
+      <section class="h-side">
+        <p>A chill arcade game for your hands. No stress, no overthinking, just one more try until that tricky shot finally connects. And it feels incredibly satisfying when it does.</p>
+        <p>Made for everyone, from first-time VR players to the most experienced.</p>
+        <!-- TODO: replace # with the Meta Horizon Store page URL once it exists -->
+        <a class="play" href="#">Wishlist</a>
+        <span class="play-note">Coming soon to Meta Quest</span>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <a href="mailto:pinchshotxr@gmail.com?subject=Pinchshot%20support">pinchshotxr@gmail.com</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <span>© 2026 Sergei Galkin</span>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+Fonts in this folder
+
+inter-latin.woff2  - Inter, by The Inter Project Authors (https://github.com/rsms/inter)
+tiny5-latin.woff2  - Tiny5, by The Tiny5 Project Authors
+
+Both fonts are licensed under the SIL Open Font License, Version 1.1.
+Full license text: https://openfontlicense.org/open-font-license-official-text/
+The files are the Latin subsets served by Google Fonts (https://fonts.google.com/specimen/Inter,
+https://fonts.google.com/specimen/Tiny5), unmodified.

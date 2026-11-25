@@ -1,0 +1,176 @@
+/* Fonts are hosted on this site (no Google requests). Both: SIL Open Font License 1.1. */
+@font-face {
+  font-family: "Inter"; font-style: normal; font-weight: 400 600; font-display: swap;
+  src: url("fonts/inter-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Tiny5"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("fonts/tiny5-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --black: #05070d;
+  --text: #eef0f5;
+  --soft: rgba(238, 240, 245, 0.72);
+  --muted: rgba(238, 240, 245, 0.5);
+  --line: rgba(238, 240, 245, 0.14);
+  --blue-light: #8caff0;
+  --btn-a: #8386a9;
+  --btn-b: #5467bb;
+  --btn-c: #2944c6;
+  --btn-side: #1a2a78;
+  --radius: 3px;
+  --pad: clamp(20px, 4vw, 56px);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--text); text-decoration: none; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- Logo ---------- */
+canvas.voxel-logo { display: block; height: auto; opacity: 0; transition: opacity 0.3s; }
+canvas.voxel-logo.ready { opacity: 1; }
+.logo-fallback { display: none; font-family: "Tiny5", monospace; font-size: 24px; letter-spacing: 3px; line-height: 1; color: var(--text); }
+.no-voxel canvas.voxel-logo { display: none; }
+.no-voxel .logo-fallback { display: block; }
+
+/* ---------- Home: one screen over the video ---------- */
+.home { min-height: 100svh; display: flex; flex-direction: column; }
+
+/* Background layers, bottom to top: poster (::before), video, black cover, dark overlay (::after).
+   The video itself is never faded: a video with opacity < 1 is drawn through a different
+   colour path than a fully opaque one, which made the end of the fade "snap". Instead the
+   black cover fades away (.revealed). The poster is only a fallback for a slow or failed video.
+   Without JS there is no cover and the poster simply shows. */
+.bg { position: fixed; inset: 0; z-index: -2; background: var(--black); }
+.bg::before { content: ""; position: absolute; inset: 0; background: url("poster.jpg") 62% center / cover no-repeat; }
+.js .bg::before { visibility: hidden; }
+.js .bg.poster::before { visibility: visible; }
+.js .bg.poster video { opacity: 0; } /* not visibility:hidden, which can stop playback */
+.bg video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 62% center; display: block; }
+.bg .cover { display: none; position: absolute; inset: 0; background: var(--black); opacity: 1; pointer-events: none; transition: opacity 1.6s cubic-bezier(0.33, 0, 0.2, 1); }
+.js .bg .cover { display: block; }
+.bg.revealed .cover { opacity: 0; }
+.bg.dip .cover { opacity: 1; transition-duration: 0.45s; }
+@media (max-width: 960px) { .bg::before { background-image: url("poster-960.jpg"); } }
+@media (prefers-reduced-motion: reduce) { .bg .cover { transition-duration: 0.01s; } }
+.bg::after {
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(5, 7, 13, 0.62) 0%, rgba(5, 7, 13, 0.25) 45%, rgba(5, 7, 13, 0.25) 60%, rgba(5, 7, 13, 0.6) 100%),
+    linear-gradient(rgba(5, 7, 13, 0.3), rgba(5, 7, 13, 0.3));
+}
+
+.h-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: var(--pad) var(--pad) 0; }
+.h-logo canvas.voxel-logo { width: clamp(150px, 15vw, 220px); }
+.h-right { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+.h-label { font-size: 13px; color: var(--soft); letter-spacing: 0.02em; padding-top: 4px; }
+
+/* Sound toggle: four little blocks, like a pixel equaliser. */
+.sound { display: inline-flex; align-items: center; gap: 10px; padding: 0; background: none; border: 0; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer; }
+.sound:hover, .sound.on { color: var(--text); }
+.sound:focus-visible { outline: 1px solid var(--text); outline-offset: 4px; }
+.sound .bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.sound .bars i { display: block; width: 3px; height: 3px; background: currentColor; }
+.sound.on .bars i { background: var(--blue-light); animation: eq 1.4s ease-in-out infinite; }
+.sound.on .bars i:nth-child(2) { animation-delay: -0.5s; }
+.sound.on .bars i:nth-child(3) { animation-delay: -0.9s; }
+.sound.on .bars i:nth-child(4) { animation-delay: -0.2s; }
+@keyframes eq { 0%, 100% { height: 3px; } 50% { height: 12px; } }
+@media (prefers-reduced-motion: reduce) { .sound.on .bars i { animation: none; height: 8px; } }
+.h-label i { font-style: normal; color: var(--muted); margin: 0 6px; }
+
+.h-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+  align-items: end;
+  gap: 40px;
+  padding: 0 var(--pad) clamp(28px, 6vh, 64px);
+}
+
+.h-lead { align-self: center; max-width: 380px; }
+.h-index { display: block; font-family: "Tiny5", monospace; font-size: 12px; letter-spacing: 2px; color: var(--muted); margin-bottom: 22px; }
+.h-title { font-weight: 500; font-size: clamp(26px, 2.6vw, 34px); line-height: 1.15; letter-spacing: 0.01em; text-transform: uppercase; margin: 0 0 16px; }
+.h-sub { color: var(--soft); font-size: 14px; max-width: 290px; margin: 0; }
+
+.h-side { font-size: 13px; color: var(--soft); }
+.h-side p { margin: 0 0 12px; }
+
+/* Primary button = the in-game PLAY button, at a quieter size. */
+.play {
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 26px; width: 220px; aspect-ratio: 4.93 / 1;
+  border-radius: 0;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    linear-gradient(100deg, var(--btn-a) 0%, var(--btn-b) 50%, var(--btn-c) 100%);
+  color: #fff; font-family: "Tiny5", monospace; font-size: 24px; letter-spacing: 3px; text-transform: uppercase;
+  box-shadow: 0 4px 0 var(--btn-side);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+}
+.play:hover { filter: brightness(1.1); }
+.play:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--btn-side); }
+.play:focus-visible { outline: 1px solid var(--text); outline-offset: 5px; }
+.play-note { display: block; margin-top: 14px; font-size: 12px; color: var(--muted); }
+
+.foot { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 22px; padding: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.foot a { color: var(--muted); }
+.foot a:hover { color: var(--text); }
+
+/* Small note shown after an email link copies the address. */
+.copy-note {
+  position: fixed; left: 50%; bottom: 64px; z-index: 10;
+  transform: translate(-50%, 8px); opacity: 0; pointer-events: none;
+  padding: 10px 16px; border-radius: var(--radius);
+  background: rgba(18, 20, 28, 0.92); border: 1px solid var(--line);
+  color: var(--text); font-size: 13px; white-space: nowrap;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.copy-note.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- Privacy page ---------- */
+.page { min-height: 100svh; background: var(--black); }
+.bar { max-width: 760px; margin: 0 auto; padding: 32px 20px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.bar canvas.voxel-logo { width: 150px; }
+.bar nav a { color: var(--soft); font-size: 13px; }
+.bar nav a:hover { color: var(--text); }
+
+.doc { max-width: 760px; margin: 0 auto; padding: 56px 20px 40px; }
+.doc .h-index { margin-bottom: 18px; }
+.doc h1 { font-weight: 500; font-size: clamp(26px, 4vw, 34px); line-height: 1.15; text-transform: uppercase; letter-spacing: 0.01em; margin: 0 0 8px; }
+.doc .date { color: var(--muted); font-size: 13px; margin-bottom: 40px; }
+.doc .lead { font-size: 17px; color: var(--text); max-width: 600px; margin: 0 0 40px; }
+.doc section { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 24px; padding: 22px 0; border-top: 1px solid var(--line); }
+.doc h2 { font-weight: 500; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text); margin: 2px 0 0; }
+.doc p, .doc li { color: var(--soft); font-size: 14px; margin: 0 0 10px; }
+.doc p:last-child, .doc ul:last-child { margin-bottom: 0; }
+.doc ul { padding-left: 18px; margin: 0 0 10px; }
+.doc strong { color: var(--text); font-weight: 500; }
+.doc a { border-bottom: 1px solid var(--line); }
+.doc a:hover { border-color: var(--text); }
+.page .foot { max-width: 760px; margin: 0 auto; }
+
+/* ---------- Phones ---------- */
+@media (max-width: 720px) {
+  .h-grid { grid-template-columns: 1fr; align-items: start; gap: 32px; padding-top: 18vh; }
+  .h-lead { align-self: start; }
+  .h-label { font-size: 11px; white-space: nowrap; padding-top: 2px; }
+  .h-logo canvas.voxel-logo { width: 128px; }
+  .bg::after { background: linear-gradient(rgba(5, 7, 13, 0.55), rgba(5, 7, 13, 0.55)); }
+  .doc section { grid-template-columns: 1fr; gap: 8px; }
+}
